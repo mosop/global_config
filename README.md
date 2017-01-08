@@ -123,7 +123,7 @@ MeetsAws.secret_access_key # "6YzNGvZ34IrVeE62..."
 MeetsAws.region # "eu-central-1"
 ```
 
-Note: This overwrites the values that are initialized with environment values.
+Note: This overwrites the values that are initialized with the environment variables.
 
 ### Setting Values in Nested Contexts
 
