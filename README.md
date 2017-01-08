@@ -127,14 +127,22 @@ Note: This overwrites the values that are initialized with environment values.
 
 ### Setting Values in Nested Contexts
 
-You can set the configuration values in nested contexts:
+Calling the nesting method, you can set the configuration values in nested contexts. The configuration values are restored after the method returns.
 
 ```crystal
+MeetsAws.access_key_id # "STWUSDFLRNNBBSCCSQXC"
+MeetsAws.secret_access_key # "6YzNGvZ34IrVeE62..."
+MeetsAws.region # "eu-central-1"
+
 MeetsAws.sign_in(access_key_id: "QEQDEOJYFEUJIJUHVOQD", secret_access_key: "RRAUvo9m8I9TYyjT...", region: "ap-southeast-1") do
   MeetsAws.access_key_id # "QEQDEOJYFEUJIJUHVOQD"
   MeetsAws.secret_access_key # "RRAUvo9m8I9TYyjT..."
   MeetsAws.region # "ap-southeast-1"
 end
+
+MeetsAws.access_key_id # "STWUSDFLRNNBBSCCSQXC"
+MeetsAws.secret_access_key # "6YzNGvZ34IrVeE62..."
+MeetsAws.region # "eu-central-1"
 ```
 
 You can nest the contexts multiple times.
@@ -152,7 +160,11 @@ end
 You can set each of the configuration values in nested contexts:
 
 ```crystal
+MeetsAws.region # "eu-central-1"
+
 MeetsAws.region("us-west-1") do
   MeetsAws.region # "us-west-1"
 end
+
+MeetsAws.region # "eu-central-1"
 ```
