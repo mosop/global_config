@@ -43,6 +43,13 @@ module GlobalConfig
           end
 
           def self.\{{name}}(value : String, &block : ->)
+            current = @@global_config_per_fiber__\{{name}}[::Fiber.current.object_id]?
+            begin
+              @@global_config_per_fiber__\{{name}}[::Fiber.current.object_id] = value
+              yield
+            ensure
+              @@global_config_per_fiber__\{{name}}[::Fiber.current.object_id] = current
+            end
           end
         {{"end".id}}
       end
@@ -58,6 +65,20 @@ module GlobalConfig
             begin
               \{% for e, i in values %}
                 @@global_config_per_fiber__\{{e.id}}[::Fiber.current.object_id] = \{{e.id}}
+              \{% end %}
+              yield
+            ensure
+              \{% for e, i in values %}
+                @@global_config_per_fiber__\{{e.id}}[::Fiber.current.object_id] = %current[\{{i}}]
+              \{% end %}
+            end
+          end
+
+          def self.\{{name}}!(\{{values.map{|i| "#{i.id} : ::String? = nil".id}.splat}})
+            %current = \{{values.map{|i| "@@global_config_per_fiber__#{i.id}[::Fiber.current.object_id]?".id}}}
+            begin
+              \{% for e, i in values %}
+                @@global_config_per_fiber__\{{e.id}}[::Fiber.current.object_id] = \{{e.id}} if \{{e.id}}
               \{% end %}
               yield
             ensure
